@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>wordglass</title>
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      body { min-height: 100vh; display: grid; place-items: center; padding: 30px 18px; }
+      .wrap { width: min(660px, 100%); }
+      .mark {
+        width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+        background: rgba(47, 191, 113, 0.12); border: 1px solid rgba(47, 191, 113, 0.3);
+        margin-bottom: 16px;
+      }
+      .mark i { width: 13px; height: 2px; border-radius: 2px; background: #2fbf71; box-shadow: 0 -4px 0 #2fbf71, 0 4px 0 #9fe8bd; display: block; }
+      h1 { font-size: 24px; font-weight: 700; margin: 0 0 6px; color: #f4fff9; letter-spacing: -.3px; }
+      .lead { color: var(--muted); font-size: 13px; margin: 0 0 24px; line-height: 1.6; }
+      .steps { display: grid; gap: 10px; margin-bottom: 22px; }
+      .step {
+        display: flex; gap: 13px; align-items: flex-start;
+        border: 1px solid rgba(47, 191, 113, 0.15); border-radius: 13px;
+        background: rgba(9, 18, 13, 0.66); padding: 13px 15px;
+        animation: rise .34s cubic-bezier(.2,.8,.25,1) both;
+      }
+      .step:nth-child(2) { animation-delay: .06s; }
+      .step:nth-child(3) { animation-delay: .12s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      .n {
+        flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px;
+        display: grid; place-items: center; font-size: 11px; font-weight: 700;
+        color: #b8f5d1; background: rgba(47, 191, 113, 0.14); border: 1px solid rgba(47, 191, 113, 0.26);
+      }
+      .step b { display: block; font-size: 12.5px; color: #eafff2; font-weight: 700; margin-bottom: 2px; }
+      .step p { margin: 0; font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+      .keys { display: grid; gap: 6px; font-size: 11px; color: var(--dim); margin-bottom: 24px; }
+      .keys span { display: flex; align-items: center; gap: 8px; }
+      kbd {
+        font: 10px/1.4 var(--font); background: rgba(47, 191, 113, 0.1);
+        border: 1px solid rgba(47, 191, 113, 0.22); border-radius: 5px; padding: 1px 5px; color: #b8f5d1;
+      }
+      .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .actions button { font-size: 12px; padding: 9px 16px; min-height: 36px; }
+      .actions .primary { background: rgba(47, 191, 113, 0.16); border-color: rgba(47, 191, 113, 0.38); color: #b8f5d1; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <span class="mark"><i></i></span>
+      <h1>wordglass</h1>
+      <p class="lead">
+        ingilizce bir kelime veya cümle seç, türkçesini cam panelde gör, defterine ekle.
+        yalnızca ingilizce metinler çevrilir; türkçe metinlerde panel açılmaz.
+        pdf'ler wordglass görüntüleyicide açılır; metin katmanı olan pdf'lerde seçim aynı paneli açar.
+        panel seçtiğin cümle kadar genişler; çok uzun metinde kompaktlaşır. panelin dışına sol tık veya <kbd>esc</kbd> kapatır.
+      </p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="n">1</span>
+          <div>
+            <b>metni seç</b>
+            <p>tek tık çeviri yapmaz. ingilizce kelimeyi veya cümleyi seç; panel yalnızca türkçe karşılığı ve kelime türünü gösterir.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="n">2</span>
+          <div>
+            <b>kaydet</b>
+            <p>kelime deftere düşer. yanlış kaydettiysen paneldeki <kbd>geri al</kbd> ile geri dönersin.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="n">3</span>
+          <div>
+            <b>tekrar et</b>
+            <p>uzantı ikonunda bekleyen kelime sayısı görünür. defterde arayabilir, tekrar turunu başlatabilirsin.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="keys">
+        <span><kbd>alt</kbd><kbd>w</kbd> çeviriyi aç / kapat</span>
+        <span><kbd>esc</kbd> paneli kapat · panelin başlığından sürükleyerek taşı</span>
+        <span>tek tık kelime çevirmez · metni seç</span>
+        <span>pdf'ler wordglass görüntüleyicide açılır · metin katmanı gerekir</span>
+        <span>seçili metne sağ tık → <b>seçili metni çevir</b></span>
+      </div>
+
+      <div class="actions">
+        <button id="defter" class="primary" type="button">defteri aç</button>
+        <button id="ayarlar" class="ghost" type="button">ayarlar</button>
+      </div>
+    </div>
+    <script src="welcome.js"></script>
+  </body>
+</html>

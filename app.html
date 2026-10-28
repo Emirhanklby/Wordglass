@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>wordglass</title>
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      html, body { height: 100%; }
+      body { overflow: hidden; }
+
+      .shell {
+        width: 400px;
+        height: 540px;
+        display: flex;
+        flex-direction: column;
+        padding: 14px 14px 12px;
+      }
+
+      .head { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; margin-bottom: 10px; }
+      .mark {
+        width: 22px; height: 22px; border-radius: 7px;
+        background: rgba(47, 191, 113, 0.12); border: 1px solid rgba(47, 191, 113, 0.28);
+        display: grid; place-items: center; flex: 0 0 auto;
+      }
+      .mark i { width: 9px; height: 2px; border-radius: 2px; background: #2fbf71; box-shadow: 0 -3px 0 #2fbf71, 0 3px 0 #9fe8bd; display: block; }
+      .brand { font-size: 12px; font-weight: 700; letter-spacing: .2px; color: #eaf6ef; }
+      .head .sp { flex: 1 1 auto; }
+      .head button { min-height: 27px; padding: 3px 9px; font-size: 11px; border-radius: 9px; }
+      .head .switch { padding: 3px 4px; font-size: 10px; }
+
+      .view { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+      .view.enter { animation: view .24s cubic-bezier(.2,.8,.25,1) both; }
+      @keyframes view { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+
+      .home { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; padding-bottom: 4px; }
+      .kicker { font-size: 9.5px; letter-spacing: 1.8px; text-transform: uppercase; color: #7d9c8b; margin: 0 0 6px; }
+      .big { font-size: 42px; font-weight: 700; line-height: 1; margin: 0; color: #f2fff8; letter-spacing: -1px; }
+      .sub { color: var(--muted); font-size: 12px; margin: 7px 0 18px; line-height: 1.5; }
+      .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+      .actions button { font-size: 12px; padding: 8px 14px; min-height: 34px; }
+      .actions .primary { background: rgba(47, 191, 113, 0.16); border-color: rgba(47, 191, 113, 0.38); color: #b8f5d1; }
+      .actions .primary:hover { background: rgba(47, 191, 113, 0.26); }
+      .only-popup { display: inline-block; }
+
+      .recent { margin-top: 18px; }
+      .recent .rh { font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; color: #7d9c8b; margin: 0 0 7px; }
+      .chips { display: flex; flex-wrap: wrap; gap: 5px; max-height: 92px; overflow: hidden; }
+      .chip {
+        font-size: 11px; padding: 3px 9px; border-radius: 99px; max-width: 100%;
+        border: 1px solid rgba(47, 191, 113, 0.16); background: rgba(47, 191, 113, 0.05);
+        color: #a8e3c2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        transition: border-color .15s ease, color .15s ease, background .15s ease;
+      }
+      .chip:hover { border-color: rgba(47, 191, 113, 0.38); color: #d6ffe7; background: rgba(47, 191, 113, 0.12); }
+      .chips .none { font-size: 12px; color: #7d9c8b; }
+
+      .offline {
+        margin-top: 14px; font-size: 11px; color: #f0b6a4;
+        border: 1px solid rgba(224, 160, 140, 0.28); background: rgba(224, 160, 140, 0.07);
+        border-radius: 9px; padding: 7px 10px; line-height: 1.5;
+      }
+
+      .toolbar { display: flex; gap: 6px; align-items: center; flex: 0 0 auto; margin-bottom: 9px; }
+      .toolbar .back { width: 28px; padding: 0; font-size: 15px; line-height: 1; min-height: 30px; border-radius: 9px; display: grid; place-items: center; }
+      .search { position: relative; flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
+      .search svg { position: absolute; left: 9px; color: #6f8f7e; pointer-events: none; }
+      .search input { width: 100%; min-height: 30px; padding: 4px 9px 4px 29px; font-size: 12px; border-radius: 9px; }
+      .iconbtn {
+        flex: 0 0 auto; width: 30px; min-height: 30px; display: grid; place-items: center;
+        padding: 0; border-radius: 9px; color: #9fc4b0;
+        border: 1px solid rgba(47, 191, 113, 0.14); background: rgba(47, 191, 113, 0.04);
+      }
+      .iconbtn:hover { color: #dcffe9; border-color: rgba(47, 191, 113, 0.36); background: rgba(47, 191, 113, 0.1); transform: none; }
+
+      .paper {
+        position: relative; flex: 1 1 auto; min-height: 0; overflow: auto;
+        border-radius: 14px;
+        border: 1px solid rgba(47, 191, 113, 0.15);
+        background:
+          radial-gradient(120% 90% at 100% 0%, rgba(21, 96, 61, 0.11), transparent 60%),
+          linear-gradient(180deg, rgba(11, 23, 16, 0.86), rgba(7, 14, 10, 0.9));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      }
+      .paperhead {
+        position: sticky; top: 0; z-index: 3;
+        display: flex; align-items: center; gap: 9px;
+        padding: 9px 12px 8px;
+        border-bottom: 1px solid rgba(47, 191, 113, 0.11);
+        background: linear-gradient(180deg, rgba(9, 19, 13, 0.97), rgba(9, 19, 13, 0.9));
+        backdrop-filter: blur(8px);
+      }
+      .phl { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
+      .paperhead .t { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #9fd9b8; }
+      .paperhead .c { font-size: 10px; color: #7d9c8b; white-space: nowrap; }
+      .paperhead .sort {
+        margin-left: auto; width: auto; min-height: 23px; padding: 1px 5px; font-size: 10px;
+        border-radius: 7px; color: #a8e3c2; border-color: rgba(47, 191, 113, 0.18);
+        background: rgba(47, 191, 113, 0.06);
+      }
+
+      .list { padding: 3px 11px 14px; }
+      .group { margin-top: 3px; }
+      .ghead {
+        display: flex; align-items: center; gap: 8px;
+        margin: 9px 2px 6px; font-size: 9px; letter-spacing: 1.6px;
+        text-transform: uppercase; color: #6f8f7e;
+      }
+      .ghead i { flex: 1 1 auto; height: 1px; background: rgba(47, 191, 113, 0.1); }
+      .ghead .gn { font-size: 9px; color: #5f7f6e; letter-spacing: .5px; }
+      .cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 7px; }
+
+      .wcard {
+        position: relative;
+        border: 1px solid rgba(47, 191, 113, 0.11);
+        background: linear-gradient(180deg, rgba(47, 191, 113, 0.045), rgba(47, 191, 113, 0.015));
+        border-radius: 11px; padding: 8px 11px 7px;
+        animation: cardIn .3s cubic-bezier(.2,.8,.25,1) both;
+        animation-delay: calc(var(--i, 0) * 22ms);
+        transition: background .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+      }
+      .wcard.plain { animation: none; }
+      .wcard:hover, .wcard:focus-within {
+        border-color: rgba(47, 191, 113, 0.25);
+        background: linear-gradient(180deg, rgba(47, 191, 113, 0.075), rgba(47, 191, 113, 0.02));
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+      }
+      .wcard:focus-visible { outline: 2px solid rgba(47, 191, 113, 0.55); outline-offset: 1px; }
+      @keyframes cardIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+      .ctop { display: flex; align-items: center; gap: 7px; min-width: 0; }
+      .ctop .en {
+        font-size: 12.5px; font-weight: 700; color: #b9d9c8; letter-spacing: .1px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .ctop .pos {
+        flex: 0 0 auto; font-size: 9px; font-weight: 600; letter-spacing: .2px;
+        color: #8fd6ad; background: rgba(47, 191, 113, 0.1);
+        border: 1px solid rgba(47, 191, 113, 0.18); border-radius: 99px; padding: 0 6px;
+      }
+      .ctr {
+        margin-top: 2px; font-size: 15.5px; font-weight: 700; line-height: 1.32; color: #f0fff6;
+        word-break: break-word;
+      }
+      .cbot { display: flex; align-items: center; gap: 7px; margin-top: 5px; min-height: 16px; }
+      .dots { display: inline-flex; gap: 3px; align-items: center; }
+      .dots i {
+        width: 4px; height: 4px; border-radius: 50%; display: block;
+        background: rgba(47, 191, 113, 0.14);
+      }
+      .dots i.on { background: #2fbf71; box-shadow: 0 0 5px rgba(47, 191, 113, 0.45); }
+      .due { font-size: 9px; letter-spacing: .3px; color: #6f8f7e; white-space: nowrap; }
+      .due.now { color: #a8e3c2; }
+      .acts { margin-left: auto; display: flex; gap: 1px; opacity: 0; pointer-events: none; transition: opacity .12s ease; }
+      .wcard:hover .acts, .wcard:focus-within .acts { opacity: 1; pointer-events: auto; }
+      .mini {
+        background: none; border: 0; padding: 2px; min-height: 0; border-radius: 6px;
+        color: #7d9c8b; display: grid; place-items: center;
+      }
+      .mini:hover { color: #d9ffe9; background: rgba(47, 191, 113, 0.12); transform: none; }
+      .mini.del:hover { color: #e6a892; }
+      @media (hover: none) {
+        .acts { opacity: .65; pointer-events: auto; }
+      }
+
+      .empty { padding: 26px 14px; color: var(--muted); font-size: 11.5px; line-height: 1.6; text-align: center; }
+      .empty svg { color: rgba(47, 191, 113, 0.45); margin-bottom: 8px; }
+      .empty b { display: block; color: #c8f5db; font-size: 12.5px; margin-bottom: 4px; font-weight: 700; }
+      .empty p { margin: 0 0 12px; }
+      .esteps { display: grid; gap: 6px; text-align: left; max-width: 250px; margin: 0 auto; }
+      .esteps span { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #8aa698; }
+      .esteps i {
+        flex: 0 0 auto; width: 18px; height: 18px; border-radius: 6px; display: grid; place-items: center;
+        font-style: normal; font-size: 9.5px; font-weight: 700; color: #a8e3c2;
+        background: rgba(47, 191, 113, 0.1); border: 1px solid rgba(47, 191, 113, 0.2);
+      }
+      .empty kbd {
+        font: 10px/1.4 var(--font); background: rgba(47, 191, 113, 0.12);
+        border: 1px solid rgba(47, 191, 113, 0.22); border-radius: 5px;
+        padding: 0 4px; color: #b8f5d1;
+      }
+
+      .toast {
+        position: fixed; left: 50%; bottom: 12px; transform: translate(-50%, 8px);
+        display: flex; align-items: center; gap: 8px;
+        background: rgba(8, 18, 12, 0.97); border: 1px solid rgba(47, 191, 113, 0.3);
+        color: #c9f7dd; font-size: 11.5px; padding: 7px 12px; border-radius: 9px;
+        opacity: 0; pointer-events: none; z-index: 5;
+        transition: opacity .18s ease, transform .18s ease;
+      }
+      .toast.in { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+      .toast button { min-height: 0; padding: 2px 7px; font-size: 10.5px; border-radius: 6px; color: #b8f5d1; border-color: rgba(47, 191, 113, 0.3); }
+      .hidden { display: none !important; }
+      kbd {
+        font: 10px/1.4 var(--font); background: rgba(47, 191, 113, 0.12);
+        border: 1px solid rgba(47, 191, 113, 0.22); border-radius: 5px;
+        padding: 0 4px; color: #b8f5d1;
+      }
+
+      @media (min-width: 620px) {
+        body { overflow: auto; }
+        .shell { width: auto; max-width: 880px; height: auto; min-height: 100vh; margin: 0 auto; padding: 26px 28px 40px; }
+        .only-popup { display: none; }
+        .home { min-height: 58vh; }
+        .big { font-size: 54px; }
+        .paper { max-height: none; }
+        .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .wcard { margin: 0; }
+        .wcard .ctr { font-size: 16px; }
+        .list { padding-bottom: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="head">
+        <span class="mark"><i></i></span>
+        <span class="brand">wordglass</span>
+        <span class="sp"></span>
+        <button id="power" class="switch on" type="button" aria-pressed="true" title="çeviriyi aç/kapat">
+          <i></i><span id="powerText">açık</span>
+        </button>
+        <button id="reviewTop" class="ghost" type="button">tekrar</button>
+        <button id="opts" class="ghost" type="button">ayarlar</button>
+      </div>
+
+      <section id="home" class="view enter">
+        <div class="home">
+          <p class="kicker">kelime havuzu</p>
+          <p class="big" id="total">0</p>
+          <p class="sub" id="sub">henüz kelime yok</p>
+          <div class="actions">
+            <button id="openWords" class="primary" type="button">kaydedilen kelimeler</button>
+            <button id="copyAll" class="ghost" type="button">llm'e aktar</button>
+            <button id="expand" class="ghost only-popup" type="button">sekmede aç</button>
+          </div>
+          <div class="recent">
+            <p class="rh">son eklenenler</p>
+            <div id="recent" class="chips"></div>
+          </div>
+          <p id="offline" class="offline hidden">
+            çeviri kapalı. sayfalarda metin seçmek bir şey yapmaz. açmak için yukarıdaki düğmeyi kullan
+            veya <kbd>alt</kbd>+<kbd>w</kbd> bas.
+          </p>
+        </div>
+      </section>
+
+      <section id="words" class="view hidden">
+        <div class="toolbar">
+          <button id="back" class="back ghost" type="button" aria-label="geri">‹</button>
+          <div class="search">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path>
+            </svg>
+            <input id="q" type="search" placeholder="kelime, çeviri veya tür ara" autocomplete="off" aria-label="defterde ara" />
+          </div>
+          <button id="copy" class="iconbtn" type="button" title="llm için kopyala" aria-label="llm için kopyala">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="10" height="10" rx="2"></rect><path d="M5 15V5a1 1 0 0 1 1-1h10"></path>
+            </svg>
+          </button>
+          <button id="file" class="iconbtn" type="button" title="markdown indir" aria-label="markdown indir">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 4v10"></path><path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path><path d="M5 20h14"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="paper" class="paper scroll">
+          <div class="paperhead">
+            <div class="phl"><span class="t">defter</span><span class="c" id="shown"></span></div>
+            <select id="sort" class="sort" aria-label="sıralama">
+              <option value="new">yeni</option>
+              <option value="az">a-z</option>
+              <option value="due">tekrar</option>
+            </select>
+          </div>
+          <div id="list" class="list"></div>
+          <div id="empty" class="empty hidden"></div>
+        </div>
+      </section>
+    </div>
+    <div class="toast" id="toast">
+      <span id="toastMsg"></span>
+      <button id="toastAct" class="ghost hidden" type="button"></button>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

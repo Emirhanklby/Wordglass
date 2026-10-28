@@ -1,0 +1,21 @@
+# işletim sistemi / editör
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# chrome uzantı çıktıları ve özel anahtarlar
+*.crx
+*.pem
+*.zip
+
+# günlükler, yerel test profilleri ve bağımlılıklar
+*.log
+chrome-*/
+node_modules/
+
+# yerel gizli ayarlar
+.env
+.env.*

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="" data-wg-viewer="1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>wordglass · pdf</title>
+    <link rel="stylesheet" href="pdfjs/web/pdf_viewer.css" />
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(90% 120% at 0% 0%, rgba(20, 84, 58, 0.24), transparent 60%),
+          #080d0a;
+        color: #d9ffe9;
+        font: 12px/1.45 Nunito, ui-sans-serif, system-ui, sans-serif;
+      }
+      #bar {
+        position: fixed;
+        z-index: 20;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 14px;
+        background: rgba(7, 14, 10, 0.94);
+        border-bottom: 1px solid rgba(47, 191, 113, 0.18);
+        backdrop-filter: blur(16px);
+      }
+      .brand {
+        color: #9fd9b8;
+        font-size: 10px;
+        letter-spacing: 1.7px;
+        text-transform: uppercase;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #eaf6ef;
+        font-weight: 600;
+        font-size: 11.5px;
+      }
+      .spacer { flex: 1; }
+      #bar button,
+      #bar a.control {
+        appearance: none;
+        border: 1px solid rgba(47, 191, 113, 0.22);
+        background: rgba(20, 64, 43, 0.28);
+        color: #c9e4d6;
+        border-radius: 7px;
+        height: 27px;
+        min-width: 27px;
+        padding: 0 8px;
+        font: inherit;
+        line-height: 25px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      #bar button:hover,
+      #bar a.control:hover { background: rgba(31, 122, 77, 0.32); color: #f3fff8; }
+      #bar button:disabled { opacity: 0.35; cursor: default; }
+      #pageInfo, #zoomInfo { color: #86a294; font-size: 10.5px; min-width: 48px; text-align: center; }
+      #viewerContainer {
+        position: absolute;
+        top: 46px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: auto;
+        background: #0b110d;
+      }
+      .pdfViewer {
+        padding: 18px 0 54px;
+      }
+      .pdfViewer .page {
+        margin: 14px auto;
+        border: 1px solid rgba(47, 191, 113, 0.16);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+        background: #fff;
+      }
+      #state {
+        position: fixed;
+        z-index: 30;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        max-width: min(440px, calc(100vw - 40px));
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(47, 191, 113, 0.24);
+        background: rgba(7, 14, 10, 0.94);
+        color: #d9ffe9;
+        text-align: center;
+        box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
+      }
+      #state[hidden] { display: none; }
+      #state a { color: #a6efc4; }
+      @media (max-width: 700px) {
+        .brand, #zoomInfo, #bar .optional { display: none; }
+        #bar { gap: 5px; padding: 0 8px; }
+        .name { font-size: 10.5px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="bar">
+      <a class="brand" href="app.html">wordglass</a>
+      <span class="name" id="filename">pdf</span>
+      <span class="spacer"></span>
+      <button id="prev" type="button" aria-label="önceki sayfa">‹</button>
+      <span id="pageInfo">– / –</span>
+      <button id="next" type="button" aria-label="sonraki sayfa">›</button>
+      <span class="optional" style="width: 4px"></span>
+      <button id="zoomOut" type="button" aria-label="küçült">−</button>
+      <span id="zoomInfo" class="optional">–</span>
+      <button id="zoomIn" type="button" aria-label="büyüt">+</button>
+      <a class="control optional" id="original" href="#" target="_blank" rel="noreferrer">orijinal</a>
+    </header>
+
+    <div id="viewerContainer">
+      <div id="viewer" class="pdfViewer"></div>
+    </div>
+
+    <div id="state">pdf yükleniyor…</div>
+
+    <script src="content.js"></script>
+    <script type="module" src="pdf-viewer.js"></script>
+  </body>
+</html>
